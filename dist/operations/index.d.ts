@@ -1,0 +1,4 @@
+import type { OperationDefinition } from "./types.js";
+export declare const operations: readonly [OperationDefinition<import("./search.js").SearchOperationResult>, OperationDefinition<import("./getPage.js").GetPageOperationResult>, OperationDefinition<import("./getCategories.js").GetCategoriesOperationResult>, OperationDefinition<import("./getCategoryMembers.js").GetCategoryMembersOperationResult>, OperationDefinition<import("./getPageInfo.js").GetPageInfoOperationResult>, OperationDefinition<import("./watchlistBrief.js").WatchlistBriefOperationResult>, OperationDefinition<import("./recentChangesBrief.js").RecentChangesBriefOperationResult>];
+export declare const getOperationByName: (name: string) => OperationDefinition | undefined;
+//# sourceMappingURL=index.d.ts.map
