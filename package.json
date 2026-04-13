@@ -31,6 +31,6 @@
     "@annangela/eslint-config": "^10.0.0",
     "@types/node": "^24.10.1",
     "typescript": "^6.0.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.4"
   }
 }
