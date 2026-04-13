@@ -474,15 +474,22 @@ npm run test:watch
 
 ### 发布流程
 
-仓库提供了一个发布脚本：
+仓库提供了一个发布脚本，可以直接通过 npm 触发：
 
 ```bash
-bash scripts/release.sh <version> [--push]
+npm run release
+```
+
+如果希望显式传入版本号或自动推送分支和 tag，也可以这样执行：
+
+```bash
+npm run release -- [<version>] [--push]
 ```
 
 发布脚本会执行以下动作：
 
 - 要求当前分支必须是 master，且工作区必须干净。
+- 未传入版本号时，交互式询问目标版本号。
 - 创建 `production/v<version>` 分支。
 - 更新 package.json 与 package-lock.json 中的版本号。
 - 安装依赖并重新构建 dist。

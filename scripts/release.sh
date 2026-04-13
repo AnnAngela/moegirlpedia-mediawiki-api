@@ -1,12 +1,56 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-version_input="${1:-}"
-push_flag="${2:-}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="$(cd "$script_dir/.." && pwd)"
+
+cd "$repo_root"
+
+print_usage() {
+    cat <<'EOF'
+Usage:
+  npm run release
+  npm run release -- [<version>] [--push]
+  bash scripts/release.sh [<version>] [--push]
+
+If <version> is omitted, the script prompts for it interactively.
+EOF
+}
+
+version_input=""
+should_push="false"
+
+for arg in "$@"; do
+    case "$arg" in
+        --push)
+            should_push="true"
+            ;;
+        -h|--help)
+            print_usage
+            exit 0
+            ;;
+        *)
+            if [[ -n "$version_input" ]]; then
+                echo "Unexpected argument: $arg" >&2
+                print_usage >&2
+                exit 1
+            fi
+
+            version_input="$arg"
+            ;;
+    esac
+done
 
 if [[ -z "$version_input" ]]; then
-    echo "Usage: $0 <version> [--push]" >&2
-    exit 1
+    current_version="$(jq -r '.version' package.json)"
+
+    while [[ -z "$version_input" ]]; do
+        read -r -p "Target version (current: ${current_version}): " version_input
+
+        if [[ -z "$version_input" ]]; then
+            echo "Version cannot be empty." >&2
+        fi
+    done
 fi
 
 normalized_version="${version_input#v}"
@@ -48,7 +92,7 @@ git add .gitignore dist package-lock.json package.json
 git commit -m "chore(release): ${tag_name}"
 git tag "$tag_name"
 
-if [[ "$push_flag" == "--push" ]]; then
+if [[ "$should_push" == "true" ]]; then
     git push origin "$branch_name"
     git push origin "$tag_name"
 fi
