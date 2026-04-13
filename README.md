@@ -535,4 +535,6 @@ bash scripts/release.sh <version> [--push]
 
 ## 许可证
 
-仓库当前未附带 LICENSE 文件。如需对外发布或复用，请先明确补充许可证声明。
+本仓库采用 Apache License 2.0 许可证发布，详见 [LICENSE](LICENSE)。
+
+第三方依赖仍分别受其各自许可证约束。
