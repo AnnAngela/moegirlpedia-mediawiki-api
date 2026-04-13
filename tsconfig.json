@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "./node_modules/@annangela/eslint-config/dist/tsconfigs/tsconfig.node24.json",
+    "compilerOptions": {
+        "rootDir": "./",
+        "noEmit": true
+    },
+    "include": [
+        "src/**/*.ts",
+        "test/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules/**",
+        "**/*.js"
+    ]
+}

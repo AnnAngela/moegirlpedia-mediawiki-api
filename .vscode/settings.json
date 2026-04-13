@@ -1,0 +1,9 @@
+{
+    "chat.mcp.serverSampling": {
+        "openclaw-skill-moegirlpedia-mediawiki-api/.vscode/mcp.json: Agent Skills": {
+            "allowedModels": [
+                "copilot/gpt-5.4-mini"
+            ]
+        }
+    }
+}
