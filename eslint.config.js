@@ -46,6 +46,7 @@ const config = [
             "**/*.js",
             "**/*.ts",
         ],
+        ignores,
         rules: {
             // Too hard to avoid in scripts, and not a security risk since these are not exposed to user input
             "security/detect-object-injection": "off",
