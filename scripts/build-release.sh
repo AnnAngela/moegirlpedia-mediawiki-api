@@ -19,5 +19,4 @@ npx esbuild src/index.ts \
     --target=node24.11 \
     --banner:js="$banner"
 
-printf 'release bundle\n' > dist/.bundled
 chmod 755 dist/index.js
