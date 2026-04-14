@@ -1,0 +1,91 @@
+name: Publish To ClawHub
+
+"on":
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+env:
+  CLAWHUB_DISABLE_TELEMETRY: "1"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: lts/*
+
+      - name: Installing the dependencies
+        uses: AnnAngela/cached_node-modules@v5
+
+      - name: Build
+        run: npm run build
+
+      - name: Resolve release metadata
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="${GITHUB_REF_NAME#v}"
+          if [[ -z "$version" || "$version" == "$GITHUB_REF_NAME" ]]; then
+            echo "Expected a v-prefixed tag, got: $GITHUB_REF_NAME" >&2
+            exit 1
+          fi
+
+          package_version="$(jq -r '.version' package.json)"
+          if [[ "$package_version" != "$version" ]]; then
+            echo "Tag version $version does not match package.json version $package_version." >&2
+            exit 1
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "slug=${{ github.event.repository.name }}" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare publish bundle
+        shell: bash
+        env:
+          SKILL_SLUG: ${{ steps.release.outputs.slug }}
+        run: |
+          set -euo pipefail
+
+          publish_dir="$RUNNER_TEMP/$SKILL_SLUG"
+
+          mkdir -p "$publish_dir/dist" "$publish_dir/scripts"
+          cp SKILL.md package.json package-lock.json "$publish_dir/"
+          install -m 555 scripts/run.sh "$publish_dir/scripts/run.sh"
+          cp -R dist/. "$publish_dir/dist/"
+          pushd "$publish_dir" && npm ci --omit=dev --no-audit --no-fund && popd
+
+      - name: Publish skill to ClawHub
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+          SKILL_SLUG: ${{ steps.release.outputs.slug }}
+          SKILL_VERSION: ${{ steps.release.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          export CLAWHUB_CONFIG_PATH="$RUNNER_TEMP/clawhub/config.json"
+          mkdir -p "$(dirname "$CLAWHUB_CONFIG_PATH")"
+
+          npm install --global --no-audit --no-fund clawhub
+
+          npx clawhub -- login --token "$CLAWHUB_TOKEN"
+          npx clawhub -- whoami
+          npx clawhub -- skill publish "$RUNNER_TEMP/$SKILL_SLUG" \
+            --slug "$SKILL_SLUG" \
+            --name "$SKILL_SLUG" \
+            --version "$SKILL_VERSION" \
+            --tags latest \
+            --changelog "Release ${GITHUB_REF_NAME}"

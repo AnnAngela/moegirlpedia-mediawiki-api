@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          node-version: 24
+          node-version: lts/*
 
       - name: Installing the dependencies
         uses: AnnAngela/cached_node-modules@v5

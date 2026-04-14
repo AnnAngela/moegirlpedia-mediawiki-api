@@ -503,6 +503,8 @@ npm run release -- [<version>]
 
 这个流程会把构建产物 dist 一并纳入发布提交。
 
+当远端收到新的 `v*` tag 时，GitHub Actions 会自动构建发布包并通过 ClawHub CLI 发布到 ClawHub。
+
 ## 目录结构
 
 | 路径 | 说明 |
