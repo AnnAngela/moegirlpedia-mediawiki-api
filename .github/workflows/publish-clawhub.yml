@@ -78,9 +78,9 @@ jobs:
 
           npm install --global --no-audit --no-fund clawhub
 
-          npx clawhub -- login --token "$CLAWHUB_TOKEN"
-          npx clawhub -- whoami
-          npx clawhub -- skill publish "$RUNNER_TEMP/$SKILL_SLUG" \
+          npx clawhub login --token "$CLAWHUB_TOKEN" --no-browser
+          npx clawhub whoami
+          npx clawhub skill publish "$RUNNER_TEMP/$SKILL_SLUG" \
             --slug "$SKILL_SLUG" \
             --name "$SKILL_SLUG" \
             --version "$SKILL_VERSION" \
