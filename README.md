@@ -480,21 +480,23 @@ npm run test:watch
 npm run release
 ```
 
-如果希望显式传入版本号或自动推送分支和 tag，也可以这样执行：
+如果希望显式传入版本号，也可以这样执行：
 
 ```bash
-npm run release -- [<version>] [--push]
+npm run release -- [<version>]
 ```
 
 发布脚本会执行以下动作：
 
-- 要求当前分支必须是 master，且工作区必须干净。
+- 要求当前分支必须是默认分支，且工作区必须干净。
 - 未传入版本号时，交互式询问目标版本号。
 - 创建 `production/v<version>` 分支。
 - 更新 package.json 与 package-lock.json 中的版本号。
 - 安装依赖并重新构建 dist。
 - 创建 `chore(release): v<version>` 提交和对应 tag。
-- 传入 `--push` 时，自动推送分支和 tag。
+- 自动推送发布分支和 tag。
+- 脚本结束时无论成功或失败，都会切回默认分支。
+- 如果在推送分支前失败，会自动删除本地发布分支和 tag。
 
 这个流程会把构建产物 dist 一并纳入发布提交。
 

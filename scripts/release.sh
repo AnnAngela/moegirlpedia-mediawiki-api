@@ -6,25 +6,43 @@ repo_root="$(cd "$script_dir/.." && pwd)"
 
 cd "$repo_root"
 
+resolve_default_branch() {
+    local remote_head=""
+
+    if remote_head="$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)"; then
+        echo "${remote_head#origin/}"
+        return 0
+    fi
+
+    if git show-ref --verify --quiet refs/heads/master; then
+        echo "master"
+        return 0
+    fi
+
+    if git show-ref --verify --quiet refs/heads/main; then
+        echo "main"
+        return 0
+    fi
+
+    echo "Could not determine the default branch." >&2
+    return 1
+}
+
 print_usage() {
     cat <<'EOF'
 Usage:
   npm run release
-  npm run release -- [<version>] [--push]
-  bash scripts/release.sh [<version>] [--push]
+  npm run release -- [<version>]
+  bash scripts/release.sh [<version>]
 
 If <version> is omitted, the script prompts for it interactively.
 EOF
 }
 
 version_input=""
-should_push="false"
 
 for arg in "$@"; do
     case "$arg" in
-        --push)
-            should_push="true"
-            ;;
         -h|--help)
             print_usage
             exit 0
@@ -56,9 +74,59 @@ fi
 normalized_version="${version_input#v}"
 tag_name="v${normalized_version}"
 branch_name="production/${tag_name}"
+default_branch="$(resolve_default_branch)"
+release_branch_created="false"
+release_tag_created="false"
+push_started="false"
 
-if [[ "$(git branch --show-current)" != "master" ]]; then
-    echo "Run this script from the master branch." >&2
+cleanup() {
+    local exit_code=$?
+    local cleanup_failed="false"
+    local current_branch=""
+
+    trap - EXIT
+
+    current_branch="$(git branch --show-current)"
+
+    if [[ "$exit_code" -ne 0 && "$current_branch" == "$branch_name" && "$push_started" == "false" ]]; then
+        git reset --hard HEAD >/dev/null 2>&1 || true
+        current_branch="$(git branch --show-current)"
+    fi
+
+    if [[ "$current_branch" != "$default_branch" ]]; then
+        if ! git switch "$default_branch" >/dev/null 2>&1; then
+            echo "Failed to switch back to $default_branch." >&2
+            cleanup_failed="true"
+        fi
+    fi
+
+    if [[ "$exit_code" -ne 0 && "$push_started" == "false" ]]; then
+        if [[ "$release_tag_created" == "true" ]]; then
+            if ! git tag -d "$tag_name" >/dev/null 2>&1; then
+                echo "Failed to delete tag $tag_name during cleanup." >&2
+                cleanup_failed="true"
+            fi
+        fi
+
+        if [[ "$release_branch_created" == "true" ]]; then
+            if ! git branch -D "$branch_name" >/dev/null 2>&1; then
+                echo "Failed to delete branch $branch_name during cleanup." >&2
+                cleanup_failed="true"
+            fi
+        fi
+    fi
+
+    if [[ "$cleanup_failed" == "true" ]]; then
+        exit 1
+    fi
+
+    exit "$exit_code"
+}
+
+trap cleanup EXIT
+
+if [[ "$(git branch --show-current)" != "$default_branch" ]]; then
+    echo "Run this script from the $default_branch branch." >&2
     exit 1
 fi
 
@@ -78,6 +146,7 @@ if git rev-parse --verify "$tag_name" >/dev/null 2>&1; then
 fi
 
 git switch -c "$branch_name"
+release_branch_created="true"
 
 npm version "$normalized_version" --no-git-tag-version
 npm ci
@@ -91,10 +160,10 @@ rm -f "$temporary_gitignore"
 git add .gitignore dist package-lock.json package.json
 git commit -m "chore(release): ${tag_name}"
 git tag "$tag_name"
+release_tag_created="true"
 
-if [[ "$should_push" == "true" ]]; then
-    git push origin "$branch_name"
-    git push origin "$tag_name"
-fi
+push_started="true"
+git push origin "$branch_name"
+git push origin "$tag_name"
 
-echo "Created release branch $branch_name and tag $tag_name."
+echo "Created release branch $branch_name and pushed tag $tag_name."
