@@ -1,8 +1,8 @@
 ---
 name: moegirlpedia-mediawiki-api
-description: 经过身份认证访问萌娘百科（Moegirlpedia）的 MediaWiki API，用于页面搜索、获取页面内容、分类、分类成员、页面摘要、监视列表简报及最近更改简报。当 OpenClaw 需要获取萌娘百科数据，且必须先登录以避开权限限制或防火墙拦截时，请使用此项。
+description: 经过身份认证访问萌娘百科（Moegirlpedia）的 MediaWiki API，用于页面搜索、获取页面内容、分类、分类成员、页面摘要、监视列表简报及最近更改简报。萌娘百科的大部分 API 要求登录后才可使用。当 OpenClaw 需要获取萌娘百科数据时，请使用此项。
 compatibility: Requires Node.js 24.11+, internet access, and the environment variables MOEGIRLPEDIA_USERNAME and MOEGIRLPEDIA_BOT_PASSWORD.
-metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_BOT_PASSWORD"],"bins":["bash","node"]},"primaryEnv":"MOEGIRLPEDIA_BOT_PASSWORD"}}
+metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_BOT_PASSWORD"],"bins":["bash","node"],"config":["memory.md"]},"primaryEnv":"MOEGIRLPEDIA_BOT_PASSWORD"}}
 ---
 
 # 萌娘百科 MediaWiki API
@@ -62,3 +62,7 @@ bash {baseDir}/scripts/run.sh recent-changes-brief --hours 12 --large-delete-thr
 - 成功轮换后，请将 memory.md 中的 `moegirlpedia_bot_password_last_rotated` 更新为当前日期。
 
 该提醒必须由 OpenClaw 处理，而非由 Node.js 运行时（runtime）处理。
+
+## 源代码
+
+该 Skill 源代码托管于 Github 仓库：<https://github.com/AnnAngela/moegirlpedia-mediawiki-api>
