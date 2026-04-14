@@ -67,7 +67,7 @@ node dist/index.js
 bash scripts/run.sh help
 ```
 
-这个脚本只会在已存在 dist/.bundled 的发布产物上运行；如果缺少该文件，会直接报错退出，不会自动安装或构建。对本地使用，建议先执行 npm ci 和 npm run build 生成产物后再调用。
+这个脚本只会在已存在 dist/index.js 的发布产物上运行；如果缺少该文件，会直接报错退出，不会自动安装或构建。对本地使用，建议先执行 npm ci 和 npm run build 生成产物后再调用。
 
 ## 快速开始
 
