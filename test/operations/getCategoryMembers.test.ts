@@ -13,7 +13,7 @@ describe("getCategoryMembersOperation", () => {
                         pageid: 1,
                         sortkeyprefix: "博",
                         timestamp: "2026-04-13T10:00:00Z",
-                        title: "博丽灵梦",
+                        title: "阿莉塞·莱韦耶勒尔",
                         type: "page",
                     },
                 ],
@@ -23,13 +23,13 @@ describe("getCategoryMembersOperation", () => {
         const result = await getCategoryMembersOperation.run({
             client,
             options: { type: "page" },
-            positionals: ["东方Project角色"],
+            positionals: ["最终幻想系列"],
         });
 
         expect(client.request).toHaveBeenCalledWith(expect.objectContaining({
-            cmtitle: "Category:东方Project角色",
+            cmtitle: "Category:最终幻想系列",
             cmtype: "page",
         }));
-        expect(result.members[0]?.title).toBe("博丽灵梦");
+        expect(result.members[0]?.title).toBe("阿莉塞·莱韦耶勒尔");
     });
 });

@@ -80,25 +80,25 @@ bash scripts/run.sh help
 ### 搜索页面
 
 ```bash
-bash scripts/run.sh search '东方Project' --limit 5
+bash scripts/run.sh search '最终幻想XIV' --limit 5
 ```
 
 ### 获取页面源码
 
 ```bash
-bash scripts/run.sh get-page '博丽灵梦'
+bash scripts/run.sh get-page '阿莉塞·莱韦耶勒尔'
 ```
 
 ### 获取页面 HTML
 
 ```bash
-bash scripts/run.sh get-page '博丽灵梦' --format html
+bash scripts/run.sh get-page '阿莉塞·莱韦耶勒尔' --format html
 ```
 
 ### 获取分类成员
 
 ```bash
-bash scripts/run.sh get-category-members '东方Project角色' --type page --limit 100
+bash scripts/run.sh get-category-members '最终幻想系列' --type page --limit 100
 ```
 
 ### 获取监视列表简报

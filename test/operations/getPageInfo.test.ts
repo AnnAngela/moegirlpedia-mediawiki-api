@@ -9,15 +9,15 @@ describe("getPageInfoOperation", () => {
             query: {
                 pages: [
                     {
-                        displaytitle: "博丽灵梦",
+                        displaytitle: "阿莉塞·莱韦耶勒尔",
                         editurl: "https://example.invalid/edit",
-                        extract: "博丽灵梦是东方Project角色。",
+                        extract: "阿莉塞·莱韦耶勒尔是最终幻想系列。",
                         fullurl: "https://example.invalid/view",
                         pageid: 42,
                         protection: [
                             { expiry: "infinity", level: "sysop", type: "edit" },
                         ],
-                        title: "博丽灵梦",
+                        title: "阿莉塞·莱韦耶勒尔",
                     },
                 ],
             },
@@ -26,14 +26,14 @@ describe("getPageInfoOperation", () => {
         const result = await getPageInfoOperation.run({
             client,
             options: {},
-            positionals: ["博丽灵梦"],
+            positionals: ["阿莉塞·莱韦耶勒尔"],
         });
 
         expect(result).toMatchObject({
-            displayTitle: "博丽灵梦",
+            displayTitle: "阿莉塞·莱韦耶勒尔",
             operation: "get-page-info",
             pageId: 42,
-            title: "博丽灵梦",
+            title: "阿莉塞·莱韦耶勒尔",
         });
         expect(result.protection).toHaveLength(1);
     });

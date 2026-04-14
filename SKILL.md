@@ -81,11 +81,11 @@ bash {baseDir}/scripts/run.sh <operation> [arguments] [--options]
 ## 示例
 
 ```bash
-bash {baseDir}/scripts/run.sh search "东方Project"
-bash {baseDir}/scripts/run.sh get-page "博丽灵梦" --format html
-bash {baseDir}/scripts/run.sh get-categories "博丽灵梦"
-bash {baseDir}/scripts/run.sh get-category-members "东方Project角色" --type page --limit 100
-bash {baseDir}/scripts/run.sh get-page-info "博丽灵梦"
+bash {baseDir}/scripts/run.sh search "最终幻想XIV"
+bash {baseDir}/scripts/run.sh get-page "阿莉塞·莱韦耶勒尔" --format html
+bash {baseDir}/scripts/run.sh get-categories "最终幻想系列"
+bash {baseDir}/scripts/run.sh get-category-members "最终幻想系列" --type page --limit 100
+bash {baseDir}/scripts/run.sh get-page-info "阿莉塞·莱韦耶勒尔"
 bash {baseDir}/scripts/run.sh watchlist-brief --hours 24
 bash {baseDir}/scripts/run.sh recent-changes-brief --hours 12 --large-delete-threshold 3000
 ```

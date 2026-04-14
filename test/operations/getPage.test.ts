@@ -7,7 +7,7 @@ describe("getPageOperation", () => {
         const client = createMockClient();
         client.request.mockResolvedValue({
             parse: {
-                displaytitle: "博丽灵梦",
+                displaytitle: "阿莉塞·莱韦耶勒尔",
                 revid: 100,
                 sections: [
                     {
@@ -25,12 +25,12 @@ describe("getPageOperation", () => {
         const result = await getPageOperation.run({
             client,
             options: {},
-            positionals: ["博丽灵梦"],
+            positionals: ["阿莉塞·莱韦耶勒尔"],
         });
 
         expect(result).toMatchObject({
             content: "== 简介 ==\n测试内容",
-            displayTitle: "博丽灵梦",
+            displayTitle: "阿莉塞·莱韦耶勒尔",
             format: "wikitext",
             operation: "get-page",
             revid: 100,
