@@ -58,7 +58,7 @@ bash {baseDir}/scripts/run.sh recent-changes-brief --hours 12 --large-delete-thr
 在使用此技能之前，请检查 OpenClaw 的 memory.md 文件中是否存在 `moegirlpedia_bot_password_last_rotated` 记录。
 
 - 如果缺失该记录，请在完成当前任务后询问用户上一次轮换密码的日期并进行记录。
-- 如果距今已超过 90 天，请提醒用户前往 `https://mzh.moegirl.org.cn/Special:BotPasswords` 轮换机器人（bot）密码，并更新 `MOEGIRLPEDIA_BOT_PASSWORD`。
+- 如果距今已超过 90 天，请提醒用户前往 <https://mzh.moegirl.org.cn/Special:BotPasswords> 轮换机器人（bot）密码，并更新 `MOEGIRLPEDIA_BOT_PASSWORD`。
 - 成功轮换后，请将 memory.md 中的 `moegirlpedia_bot_password_last_rotated` 更新为当前日期。
 
 该提醒必须由 OpenClaw 处理，而非由 Node.js 运行时（runtime）处理。
