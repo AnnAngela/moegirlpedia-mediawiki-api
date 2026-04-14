@@ -64,23 +64,25 @@ jobs:
           install -m 555 scripts/run.sh "$publish_dir/scripts/run.sh"
           cp -R dist/. "$publish_dir/dist/"
 
+      - name: Install clawhub
+        shell: bash
+        run: npm install --global --no-audit --no-fund clawhub
+
       - name: Publish skill to ClawHub
+        shell: bash
         env:
           CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
           SKILL_SLUG: ${{ steps.release.outputs.slug }}
           SKILL_VERSION: ${{ steps.release.outputs.version }}
-        shell: bash
         run: |
           set -euo pipefail
 
           export CLAWHUB_CONFIG_PATH="$RUNNER_TEMP/clawhub/config.json"
           mkdir -p "$(dirname "$CLAWHUB_CONFIG_PATH")"
 
-          npm install --global --no-audit --no-fund clawhub
-
-          npx clawhub login --token "$CLAWHUB_TOKEN" --no-browser
-          npx clawhub whoami
-          npx clawhub publish "$RUNNER_TEMP/$SKILL_SLUG" \
+          clawhub login --token "$CLAWHUB_TOKEN" --no-browser
+          clawhub whoami
+          clawhub publish "$RUNNER_TEMP/$SKILL_SLUG" \
             --slug "$SKILL_SLUG" \
             --name "$SKILL_SLUG" \
             --version "$SKILL_VERSION" \
