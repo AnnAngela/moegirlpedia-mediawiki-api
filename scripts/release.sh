@@ -29,7 +29,7 @@ resolve_default_branch() {
 }
 
 print_usage() {
-        cat <<'EOF'
+    cat <<'EOF'
 Usage:
     npm run release
     npm run release -- [<version>]
