@@ -137,6 +137,8 @@ cleanup() {
 
 trap cleanup EXIT
 
+echo "Verifying that branch $branch_name and tag $tag_name do not already exist locally or remotely..."
+
 if git rev-parse --verify "$branch_name" >/dev/null 2>&1; then
     echo "Branch $branch_name already exists." >&2
     exit 1
@@ -160,23 +162,26 @@ fi
 git switch -c "$branch_name"
 release_branch_created="true"
 
+echo 'Bumping version and building release...'
+
 npm version "$normalized_version" --no-git-tag-version
-npm ci
+npm ci --no-audit --no-fund
 npm run build
 
-temporary_gitignore="$(mktemp)"
-grep -vx 'dist' .gitignore > "$temporary_gitignore"
-cat "$temporary_gitignore" > .gitignore
-rm -f "$temporary_gitignore"
+echo '!dist' >> .gitignore
+
+echo "Committing release branch $branch_name and pushing tag $tag_name..."
 
 git add .gitignore dist package-lock.json package.json
 git commit -m "chore(release): ${tag_name}"
 git tag "$tag_name"
 release_tag_created="true"
-
 git push origin "$branch_name"
 release_branch_pushed="true"
 git push origin "$tag_name"
+
+echo "Switching back to $default_branch and updating version to $normalized_version..."
+
 git switch "$default_branch" >/dev/null 2>&1
 npm version "$normalized_version" --no-git-tag-version
 git add package-lock.json package.json
