@@ -79,9 +79,9 @@ jobs:
           export CLAWHUB_CONFIG_PATH="$RUNNER_TEMP/clawhub/config.json"
           mkdir -p "$(dirname "$CLAWHUB_CONFIG_PATH")"
 
-          ./node_modules/.bin/clawhub login --token "$CLAWHUB_TOKEN" --no-browser
-          ./node_modules/.bin/clawhub whoami
-          ./node_modules/.bin/clawhub publish "$RUNNER_TEMP/$SKILL_SLUG" \
+          npx clawhub login --token "$CLAWHUB_TOKEN" --no-browser
+          npx clawhub whoami
+          npx clawhub publish "$RUNNER_TEMP/$SKILL_SLUG" \
             --slug "$SKILL_SLUG" \
             --name "$SKILL_SLUG" \
             --version "$SKILL_VERSION" \
