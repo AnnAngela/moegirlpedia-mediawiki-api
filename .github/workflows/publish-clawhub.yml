@@ -24,6 +24,9 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Installing the dependencies
+        uses: AnnAngela/cached_node-modules@v5
+
       - name: Resolve release metadata
         id: release
         shell: bash
@@ -64,10 +67,6 @@ jobs:
           install -m 555 scripts/run.sh "$publish_dir/scripts/run.sh"
           cp -R dist/. "$publish_dir/dist/"
 
-      - name: Install clawhub
-        shell: bash
-        run: npm install --global --no-audit --no-fund clawhub
-
       - name: Publish skill to ClawHub
         shell: bash
         env:
@@ -80,9 +79,9 @@ jobs:
           export CLAWHUB_CONFIG_PATH="$RUNNER_TEMP/clawhub/config.json"
           mkdir -p "$(dirname "$CLAWHUB_CONFIG_PATH")"
 
-          clawhub login --token "$CLAWHUB_TOKEN" --no-browser
-          clawhub whoami
-          clawhub publish "$RUNNER_TEMP/$SKILL_SLUG" \
+          ./node_modules/.bin/clawhub login --token "$CLAWHUB_TOKEN" --no-browser
+          ./node_modules/.bin/clawhub whoami
+          ./node_modules/.bin/clawhub publish "$RUNNER_TEMP/$SKILL_SLUG" \
             --slug "$SKILL_SLUG" \
             --name "$SKILL_SLUG" \
             --version "$SKILL_VERSION" \
