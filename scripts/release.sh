@@ -29,11 +29,11 @@ resolve_default_branch() {
 }
 
 print_usage() {
-    cat <<'EOF'
+        cat <<'EOF'
 Usage:
-  npm run release
-  npm run release -- [<version>]
-  bash scripts/release.sh [<version>]
+    npm run release
+    npm run release -- [<version>]
+    bash scripts/release.sh [<version>]
 
 If <version> is omitted, the script prompts for it interactively.
 EOF
@@ -177,5 +177,9 @@ release_tag_created="true"
 git push origin "$branch_name"
 release_branch_pushed="true"
 git push origin "$tag_name"
+git switch "$default_branch" >/dev/null 2>&1
+npm version "$normalized_version" --no-git-tag-version
+git commit -m "chore(release): ${tag_name}"
+git push origin "$default_branch"
 
-echo "Created release branch $branch_name and pushed tag $tag_name."
+echo "Created release branch $branch_name and pushed tag $tag_name. Updated $default_branch/package.json and package-lock.json to $normalized_version."

@@ -497,6 +497,7 @@ npm run release -- [<version>]
 - 安装依赖并重新构建 dist。
 - 创建 `chore(release): v<version>` 提交和对应 tag。
 - 自动推送发布分支和 tag。
+- 发布成功后，切回默认分支并把 `package.json` 与 `package-lock.json` 中的版本号更新为新版本。
 - 脚本结束时无论成功或失败，都会切回默认分支。
 - 如果在发布分支成功推送前失败，会自动删除本地发布分支和 tag。
 
