@@ -89,7 +89,7 @@ tag_name="v${normalized_version}"
 branch_name="production/${tag_name}"
 release_branch_created="false"
 release_tag_created="false"
-push_started="false"
+release_branch_pushed="false"
 
 cleanup() {
     local exit_code=$?
@@ -100,7 +100,7 @@ cleanup() {
 
     current_branch="$(git branch --show-current)"
 
-    if [[ "$exit_code" -ne 0 && "$current_branch" == "$branch_name" && "$push_started" == "false" ]]; then
+    if [[ "$exit_code" -ne 0 && "$current_branch" == "$branch_name" && "$release_branch_pushed" == "false" ]]; then
         git reset --hard HEAD >/dev/null 2>&1 || true
         current_branch="$(git branch --show-current)"
     fi
@@ -112,7 +112,7 @@ cleanup() {
         fi
     fi
 
-    if [[ "$exit_code" -ne 0 && "$push_started" == "false" ]]; then
+    if [[ "$exit_code" -ne 0 && "$release_branch_pushed" == "false" ]]; then
         if [[ "$release_tag_created" == "true" ]]; then
             if ! git tag -d "$tag_name" >/dev/null 2>&1; then
                 echo "Failed to delete tag $tag_name during cleanup." >&2
@@ -147,6 +147,16 @@ if git rev-parse --verify "$tag_name" >/dev/null 2>&1; then
     exit 1
 fi
 
+if git ls-remote --exit-code --heads origin "$branch_name" >/dev/null 2>&1; then
+    echo "Remote branch $branch_name already exists." >&2
+    exit 1
+fi
+
+if git ls-remote --exit-code --tags origin "$tag_name" >/dev/null 2>&1; then
+    echo "Remote tag $tag_name already exists." >&2
+    exit 1
+fi
+
 git switch -c "$branch_name"
 release_branch_created="true"
 
@@ -164,8 +174,8 @@ git commit -m "chore(release): ${tag_name}"
 git tag "$tag_name"
 release_tag_created="true"
 
-push_started="true"
 git push origin "$branch_name"
+release_branch_pushed="true"
 git push origin "$tag_name"
 
 echo "Created release branch $branch_name and pushed tag $tag_name."
