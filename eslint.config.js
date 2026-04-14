@@ -8,6 +8,7 @@ configs.base.languageOptions.parserOptions.ecmaVersion = 2025;
  * @type { import("eslint").Linter.Config["ignores"] }
  */
 const ignores = [
+    "dist/**",
     "**/dist/**",
     "**/.*/**",
     "node_modules",
@@ -16,6 +17,9 @@ const ignores = [
  * @type { import("eslint").Linter.Config[] }
  */
 const config = [
+    {
+        ignores,
+    },
     // base
     {
         ...configs.base,

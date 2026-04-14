@@ -4,6 +4,11 @@ set -euo pipefail
 base_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$base_dir"
 
+if [[ -f dist/.bundled ]]; then
+    node dist/index.js "$@"
+    exit 0
+fi
+
 if [[ ! -d node_modules ]]; then
     npm install
 fi

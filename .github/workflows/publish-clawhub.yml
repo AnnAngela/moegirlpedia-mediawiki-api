@@ -22,14 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          cache: npm
           node-version: lts/*
-
-      - name: Installing the dependencies
-        uses: AnnAngela/cached_node-modules@v5
-
-      - name: Build
-        run: npm run build
 
       - name: Resolve release metadata
         id: release
@@ -61,11 +54,15 @@ jobs:
 
           publish_dir="$RUNNER_TEMP/$SKILL_SLUG"
 
+          if [[ ! -f dist/index.js || ! -f dist/.bundled ]]; then
+            echo "Expected a bundled release artifact in dist/." >&2
+            exit 1
+          fi
+
           mkdir -p "$publish_dir/dist" "$publish_dir/scripts"
-          cp SKILL.md package.json package-lock.json "$publish_dir/"
+          cp SKILL.md package.json "$publish_dir/"
           install -m 555 scripts/run.sh "$publish_dir/scripts/run.sh"
           cp -R dist/. "$publish_dir/dist/"
-          pushd "$publish_dir" && npm ci --omit=dev --no-audit --no-fund && popd
 
       - name: Publish skill to ClawHub
         env:

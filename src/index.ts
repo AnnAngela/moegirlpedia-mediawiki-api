@@ -1,7 +1,7 @@
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 import { createClientFromEnv, type Environment, type MediaWikiClient } from "./client.js";
-import { parseCliArguments, type ParsedCliArguments, UsageError } from "./helpers.js";
+import { parseCliArguments, UsageError } from "./helpers.js";
 import { operations } from "./operations/index.js";
 import type { OperationDefinition } from "./operations/types.js";
 
@@ -81,8 +81,6 @@ export const runCli = async (argv: readonly string[] = process.argv.slice(2), de
         return 1;
     }
 };
-
-export const parseArguments = (argv: readonly string[]): ParsedCliArguments => parseCliArguments(argv);
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
     process.exitCode = await runCli();

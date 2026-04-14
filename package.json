@@ -14,7 +14,7 @@
     "SKILL.md"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "bash scripts/build-release.sh",
     "lint": "eslint .",
     "release": "bash scripts/release.sh",
     "start": "node dist/index.js",
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@annangela/eslint-config": "^11.0.0",
     "@types/node": "^24.10.1",
+    "esbuild": "^0.28.0",
     "typescript": "^6.0.2",
     "vitest": "^4.1.4"
   }
