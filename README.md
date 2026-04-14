@@ -489,6 +489,7 @@ npm run release -- [<version>]
 发布脚本会执行以下动作：
 
 - 要求当前分支必须是默认分支，且工作区必须干净。
+- 先执行 `npm run lint`，通过后再继续处理版本号和后续发布流程。
 - 未传入版本号时，交互式询问目标版本号。
 - 创建 `production/v<version>` 分支。
 - 更新 package.json 与 package-lock.json 中的版本号。

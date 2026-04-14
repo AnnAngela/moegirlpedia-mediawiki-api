@@ -58,6 +58,19 @@ for arg in "$@"; do
             ;;
     esac
 done
+default_branch="$(resolve_default_branch)"
+
+if [[ "$(git branch --show-current)" != "$default_branch" ]]; then
+    echo "Run this script from the $default_branch branch." >&2
+    exit 1
+fi
+
+if [[ -n "$(git status --porcelain)" ]]; then
+    echo "Working tree must be clean before creating a release branch." >&2
+    exit 1
+fi
+
+npm run lint
 
 if [[ -z "$version_input" ]]; then
     current_version="$(jq -r '.version' package.json)"
@@ -74,7 +87,6 @@ fi
 normalized_version="${version_input#v}"
 tag_name="v${normalized_version}"
 branch_name="production/${tag_name}"
-default_branch="$(resolve_default_branch)"
 release_branch_created="false"
 release_tag_created="false"
 push_started="false"
@@ -124,16 +136,6 @@ cleanup() {
 }
 
 trap cleanup EXIT
-
-if [[ "$(git branch --show-current)" != "$default_branch" ]]; then
-    echo "Run this script from the $default_branch branch." >&2
-    exit 1
-fi
-
-if [[ -n "$(git status --porcelain)" ]]; then
-    echo "Working tree must be clean before creating a release branch." >&2
-    exit 1
-fi
 
 if git rev-parse --verify "$branch_name" >/dev/null 2>&1; then
     echo "Branch $branch_name already exists." >&2
