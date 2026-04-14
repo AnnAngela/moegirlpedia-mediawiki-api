@@ -67,7 +67,7 @@ node dist/index.js
 bash scripts/run.sh help
 ```
 
-这个脚本会在缺少依赖时自动执行 npm install，在缺少构建产物时自动执行 npm run build，然后再运行 CLI。对临时调用很方便，但在 CI 或可重复构建场景中，通常更建议显式执行 npm ci 和 npm run build。
+这个脚本只会在已存在 dist/.bundled 的发布产物上运行；如果缺少该文件，会直接报错退出，不会自动安装或构建。对本地使用，建议先执行 npm ci 和 npm run build 生成产物后再调用。
 
 ## 快速开始
 
@@ -514,7 +514,7 @@ npm run release -- [<version>]
 | src/index.ts | CLI 主入口。 |
 | src/operations | 所有预定义操作的实现。 |
 | test | 单元测试。 |
-| scripts/run.sh | 本地运行脚本，带自动安装和自动构建。 |
+| scripts/run.sh | 本地运行脚本，要求已构建产物。 |
 | scripts/release.sh | 发布脚本。 |
 | SKILL.md | 面向 OpenClaw 的技能说明。 |
 
@@ -536,9 +536,9 @@ npm run release -- [<version>]
 
 不建议。continueToken 是对 MediaWiki 续页对象的封装，应直接复用上一次返回值。
 
-### 5. 为什么脚本第一次运行比较慢
+### 5. 为什么脚本会直接报错
 
-因为 scripts/run.sh 在缺少 node_modules 或 dist/index.js 时会自动执行安装与构建。首次执行慢属于预期行为。
+因为 scripts/run.sh 不再自动安装或构建；如果 dist/.bundled 缺失，它会直接报错退出。首次使用前请先执行 npm ci 和 npm run build。
 
 ## 安全建议
 

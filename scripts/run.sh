@@ -4,17 +4,9 @@ set -euo pipefail
 base_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$base_dir"
 
-if [[ -f dist/.bundled ]]; then
-    node dist/index.js "$@"
-    exit 0
-fi
-
-if [[ ! -d node_modules ]]; then
-    npm install
-fi
-
-if [[ ! -f dist/index.js ]]; then
-    npm run build
+if [[ ! -f dist/.bundled ]]; then
+    echo "Expected dist/.bundled to exist. Run npm run build first." >&2
+    exit 1
 fi
 
 node dist/index.js "$@"
