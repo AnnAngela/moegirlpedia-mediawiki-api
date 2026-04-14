@@ -9,6 +9,43 @@ metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_
 
 当您需要通过 MediaWiki API 获取萌娘百科经过身份认证的数据时，请使用此技能（skill）。
 
+## 环境变量
+
+运行前必须设置以下环境变量：
+
+| 变量名 | 必填 | 说明 |
+| --- | --- | --- |
+| MOEGIRLPEDIA_USERNAME | 是 | 萌娘百科用户名，通常建议使用 BotPassword 对应的账号名。 |
+| MOEGIRLPEDIA_BOT_PASSWORD | 是 | 萌娘百科 Bot Password。不要填主密码。 |
+
+## 创建机器人密码的建议
+
+建议在萌娘百科账户设置中创建一个专用的机器人密码（Bot Password），并设置适当的权限和限制，以增强安全性。
+
+### 权限建议
+
+在创建机器人密码时，建议只授权必要的权限，当前可用的操作所需的权限如下：
+
+- `search`：不需要权限；
+- `get-page`：需要“基本操作”（阅读页面）；
+- `get-categories`：需要“基本操作”（阅读页面）；
+- `get-category-members`：需要“基本操作”（阅读页面）；
+- `get-page-info`：需要“基本操作”（阅读页面）；
+- `watchlist-brief`：需要“查看您的监视列表”（查看自己的监视列表）；
+- `recent-changes-brief`：不需要权限。
+
+综上所述，建议只授权“基本操作”、“查看您的监视列表”。
+
+### IP 段建议
+
+如果运行 Openclaw 的设备具有固定 IP 地址或固定 IP 段（例如网络提供商的区域 IP 段），建议在创建机器人密码时限制允许的 IP 段，以增强安全性。
+
+MediaWiki 支持 IP 地址或 CIDR 段格式，例如：`1.14.5.14` 或 `19.19.81.0/24`。
+
+### 允许编辑的页面建议
+
+目前本 Skill 暂不涉及编辑页面的操作，建议将“允许编辑的页面”***仅***设置为 `[[Help:沙盒]]`，以防止机器人密码被泄露后造成大规模的恶意编辑。
+
 ## 命令
 
 通过附带的脚本运行命令：
