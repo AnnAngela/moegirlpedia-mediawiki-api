@@ -179,6 +179,7 @@ release_branch_pushed="true"
 git push origin "$tag_name"
 git switch "$default_branch" >/dev/null 2>&1
 npm version "$normalized_version" --no-git-tag-version
+git add package-lock.json package.json
 git commit -m "chore(release): ${tag_name}"
 git push origin "$default_branch"
 
