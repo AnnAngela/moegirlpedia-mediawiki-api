@@ -73,6 +73,7 @@ jobs:
           CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
           SKILL_SLUG: ${{ steps.release.outputs.slug }}
           SKILL_VERSION: ${{ steps.release.outputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
 
