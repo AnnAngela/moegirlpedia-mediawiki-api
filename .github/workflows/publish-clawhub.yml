@@ -57,7 +57,7 @@ jobs:
 
           publish_dir="$RUNNER_TEMP/$SKILL_SLUG"
 
-          if [[ ! -f dist/index.js || ! -f dist/.bundled ]]; then
+          if [[ ! -f dist/index.js ]]; then
             echo "Expected a bundled release artifact in dist/." >&2
             exit 1
           fi

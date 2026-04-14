@@ -538,7 +538,7 @@ npm run release -- [<version>]
 
 ### 5. 为什么脚本会直接报错
 
-因为 scripts/run.sh 不再自动安装或构建；如果 dist/.bundled 缺失，它会直接报错退出。首次使用前请先执行 npm ci 和 npm run build。
+因为 scripts/run.sh 不再自动安装或构建；如果 dist/index.js 缺失，它会直接报错退出。首次使用前请先执行 npm ci 和 npm run build。
 
 ## 安全建议
 
