@@ -70,6 +70,7 @@ if [[ -n "$(git status --porcelain)" ]]; then
     exit 1
 fi
 
+echo '-------------------------------------'
 echo 'Linting code...'
 npm run lint
 echo 'Running tests...'
@@ -77,6 +78,7 @@ npm run test
 echo 'Building release for testing...'
 npm run build
 echo 'All checks passed. Proceeding with release...'
+echo '-------------------------------------'
 
 if [[ -z "$version_input" ]]; then
     current_version="$(jq -r '.version' package.json)"
@@ -143,6 +145,7 @@ cleanup() {
 
 trap cleanup EXIT
 
+echo '-------------------------------------'
 echo "Verifying that branch $branch_name and tag $tag_name do not already exist locally or remotely..."
 
 if git rev-parse --verify "$branch_name" >/dev/null 2>&1; then
@@ -165,6 +168,7 @@ if git ls-remote --exit-code --tags origin "$tag_name" >/dev/null 2>&1; then
     exit 1
 fi
 
+echo '-------------------------------------'
 git switch -c "$branch_name"
 release_branch_created="true"
 
@@ -176,6 +180,7 @@ npm run build
 
 echo '!dist' >> .gitignore
 
+echo '-------------------------------------'
 echo "Committing release branch $branch_name and pushing tag $tag_name..."
 
 git add .gitignore dist package-lock.json package.json
@@ -186,6 +191,7 @@ git push origin "$branch_name"
 release_branch_pushed="true"
 git push origin "$tag_name"
 
+echo '-------------------------------------'
 echo "Switching back to $default_branch and updating version to $normalized_version..."
 
 git switch "$default_branch" >/dev/null 2>&1
@@ -195,3 +201,5 @@ git commit -m "chore(release): ${tag_name}"
 git push origin "$default_branch"
 
 echo "Created release branch $branch_name and pushed tag $tag_name. Updated $default_branch/package.json and package-lock.json to $normalized_version."
+echo '-------------------------------------'
+echo ''
