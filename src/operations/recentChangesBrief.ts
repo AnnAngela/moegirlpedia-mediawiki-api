@@ -1,3 +1,6 @@
+import type {
+    UnknownApiParams,
+} from "types-mediawiki-api";
 import {
     asArray,
     asBoolean,
@@ -197,6 +200,7 @@ export const recentChangesBriefOperation: OperationDefinition<RecentChangesBrief
         const limit = parseIntegerOption(options, "limit", 100, { max: 500, min: 1 });
         const timeRange = resolveTimeRange(options, 24);
         const continueToken = decodeContinueToken(asString(options["continue-token"]) ?? undefined);
+        const continueParams = (continueToken ?? {}) as UnknownApiParams;
         const namespace = parseDelimitedOption(options, "namespace");
         const changeType = parseDelimitedOption(options, "type");
         const showFilter = parseDelimitedOption(options, "show");
@@ -206,7 +210,7 @@ export const recentChangesBriefOperation: OperationDefinition<RecentChangesBrief
         const largeEditThreshold = parseIntegerOption(options, "large-edit-threshold", 5_000, { max: 1_000_000, min: 1 });
         const largeDeleteThreshold = parseIntegerOption(options, "large-delete-threshold", 2_000, { max: 1_000_000, min: 1 });
         const suspiciousKeywords = parseKeywordList(asString(options["suspicious-keywords"]));
-        const requestParams: Record<string, unknown> = {
+        const requestParams: UnknownApiParams = {
             action: "query",
             list: "recentchanges",
             rcdir: "newer",
@@ -242,7 +246,7 @@ export const recentChangesBriefOperation: OperationDefinition<RecentChangesBrief
 
         const response = await client.post({
             ...requestParams,
-            ...continueToken,
+            ...continueParams,
         }) as RecentChangesResponse;
 
         const alerts = asArray(response.query?.recentchanges)
