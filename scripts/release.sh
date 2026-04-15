@@ -70,7 +70,11 @@ if [[ -n "$(git status --porcelain)" ]]; then
     exit 1
 fi
 
+echo 'Linting code...'
 npm run lint
+echo 'Running tests...'
+npm run test
+echo 'All checks passed. Proceeding with release...'
 
 if [[ -z "$version_input" ]]; then
     current_version="$(jq -r '.version' package.json)"
