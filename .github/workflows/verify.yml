@@ -1,18 +1,17 @@
-name: Test
+name: Verify
+
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
 
 permissions:
   contents: read
 
-on:
-  push:
-    branches:
-      - "**"
-  pull_request:
-    branches:
-      - master
-
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,8 +27,11 @@ jobs:
       - name: Installing the dependencies
         uses: AnnAngela/cached_node-modules@v5
 
-      - name: Build
-        run: npm run build
+      - name: Lint
+        run: npm run lint
 
       - name: Run tests
         run: npm run test
+
+      - name: Build
+        run: npm run build
