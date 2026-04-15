@@ -17,6 +17,6 @@ npx esbuild src/index.ts \
     --outfile=dist/index.js \
     --platform=node \
     --target=node24.11 \
-    --banner:js="$banner"
+    # --banner:js="$banner"
 
 chmod 755 dist/index.js
