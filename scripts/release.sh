@@ -74,6 +74,8 @@ echo 'Linting code...'
 npm run lint
 echo 'Running tests...'
 npm run test
+echo 'Building release for testing...'
+npm run build
 echo 'All checks passed. Proceeding with release...'
 
 if [[ -z "$version_input" ]]; then
