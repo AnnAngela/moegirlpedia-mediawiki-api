@@ -28,12 +28,12 @@ metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_
 
 - `search`：不需要权限；
 - `get-page`：需要“基本操作”（阅读页面）；
-- `parse-wikitext`：需要“基本操作”（解析页面内容）；
+- `parse-wikitext`：不需要权限；
 - `get-categories`：需要“基本操作”（阅读页面）；
-- `get-categories-by-prefix`：需要“基本操作”（读取分类列表）；
+- `get-categories-by-prefix`：不需要权限；
 - `get-category-members`：需要“基本操作”（阅读页面）；
 - `get-page-info`：需要“基本操作”（阅读页面）；
-- `get-user-info`：不需要额外权限（仅需成功登录）；
+- `get-user-info`：不需要权限；
 - `watchlist-brief`：需要“查看您的监视列表”（查看自己的监视列表）；
 - `recent-changes-brief`：不需要权限。
 
