@@ -19,7 +19,9 @@ export const defaultUserAgent = `Node/${process.version} ${packageJson.name}/${p
 type TypeOrArray<T> = T extends any ? T | T[] : never; // T[] would be a mixed array
 type ReplaceValue<T extends U | U[], U, V> = T extends U[] ? V[] : V;
 /**
- * 到期时间。可以是相对时间（例如：5 months 或 2 weeks）或是绝对时间（例如：2014-09-18T12:34:56Z）。如果要无期限，请使用 infinite、indefinite、infinity、或 never。
+ * 到期时间。可以是相对时间（例如：5 months 或 2 weeks）或是绝对时间（例如：2014-09-18T12:34:56Z）。
+ *
+ * 如果要无期限，请使用 `infinite`、`indefinite`、`infinity`、或 `never`。
  */
 type Expiry = string;
 
