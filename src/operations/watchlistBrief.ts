@@ -1,3 +1,4 @@
+import type { UnknownApiParams } from "types-mediawiki-api";
 import {
     asArray,
     asBoolean,
@@ -125,12 +126,13 @@ export const watchlistBriefOperation: OperationDefinition<WatchlistBriefOperatio
         const limit = parseIntegerOption(options, "limit", 50, { max: 500, min: 1 });
         const timeRange = resolveTimeRange(options, 24);
         const continueToken = decodeContinueToken(asString(options["continue-token"]) ?? undefined);
+        const continueParams = (continueToken ?? {}) as UnknownApiParams;
         const namespace = parseDelimitedOption(options, "namespace");
         const changeType = parseDelimitedOption(options, "type");
         const showFilter = parseDelimitedOption(options, "show");
         const user = asString(options.user);
         const excludeUser = asString(options["exclude-user"]);
-        const requestParams: Record<string, unknown> = {
+        const requestParams: UnknownApiParams = {
             action: "query",
             list: "watchlist",
             wlallrev: true,
@@ -163,7 +165,7 @@ export const watchlistBriefOperation: OperationDefinition<WatchlistBriefOperatio
 
         const response = await client.post({
             ...requestParams,
-            ...continueToken,
+            ...continueParams,
         }) as WatchlistResponse;
 
         const changes = asArray(response.query?.watchlist)
