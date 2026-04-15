@@ -89,7 +89,7 @@ bash {baseDir}/scripts/run.sh <operation> [arguments] [--options]
 ```bash
 bash {baseDir}/scripts/run.sh search "最终幻想XIV"
 bash {baseDir}/scripts/run.sh get-page "阿莉塞·莱韦耶勒尔" --format html
-bash {baseDir}/scripts/run.sh parse-wikitext "'''测试'''" --title "Help:沙盒"
+bash {baseDir}/scripts/run.sh parse-wikitext "[[阿莉塞·莱韦耶勒尔]]" --title "Help:沙盒"
 bash {baseDir}/scripts/run.sh get-categories-by-prefix "最终幻想"
 bash {baseDir}/scripts/run.sh get-categories "最终幻想系列"
 bash {baseDir}/scripts/run.sh get-category-members "最终幻想系列" --type page --limit 100
