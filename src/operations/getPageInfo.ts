@@ -31,7 +31,7 @@ export const getPageInfoOperation: OperationDefinition<GetPageInfoOperationResul
     usage: "get-page-info <title>",
     run: async ({ client, positionals }) => {
         const title = requirePositional(positionals, 0, "title");
-        const response = await client.request({
+        const response = await client.post({
             action: "query",
             explaintext: true,
             exintro: true,

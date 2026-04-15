@@ -161,7 +161,7 @@ export const watchlistBriefOperation: OperationDefinition<WatchlistBriefOperatio
             requestParams.wluser = user;
         }
 
-        const response = await client.request({
+        const response = await client.post({
             ...requestParams,
             ...continueToken,
         }) as WatchlistResponse;

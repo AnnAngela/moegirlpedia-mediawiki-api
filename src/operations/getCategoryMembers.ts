@@ -44,7 +44,7 @@ export const getCategoryMembersOperation: OperationDefinition<GetCategoryMembers
         const limit = parseIntegerOption(options, "limit", 50, { max: 500, min: 1 });
         const memberType = parseDelimitedOption(options, "type");
         const continueToken = decodeContinueToken(asString(options["continue-token"]) ?? undefined);
-        const response = await client.request({
+        const response = await client.post({
             action: "query",
             cmlimit: limit,
             cmprop: "ids|title|type|timestamp|sortkeyprefix",

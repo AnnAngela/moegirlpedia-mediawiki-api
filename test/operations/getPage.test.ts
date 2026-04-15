@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { getPageOperation } from "../../src/operations/getPage.js";
-import { createMockClient } from "../helpers/mockMwn.js";
+import { createMockClient } from "../helpers/mockApi.js";
 
 describe("getPageOperation", () => {
     it("returns parsed page content and sections", async () => {
         const client = createMockClient();
-        client.request.mockResolvedValue({
+        client.post.mockResolvedValue({
             parse: {
                 displaytitle: "阿莉塞·莱韦耶勒尔",
                 revid: 100,

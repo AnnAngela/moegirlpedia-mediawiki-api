@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { getCategoriesOperation } from "../../src/operations/getCategories.js";
-import { createMockClient } from "../helpers/mockMwn.js";
+import { createMockClient } from "../helpers/mockApi.js";
 
 describe("getCategoriesOperation", () => {
     it("returns the page categories and pagination info", async () => {
         const client = createMockClient();
-        client.request.mockResolvedValue({
+        client.post.mockResolvedValue({
             "continue": { clcontinue: "42|Category:测试" },
             query: {
                 pages: [

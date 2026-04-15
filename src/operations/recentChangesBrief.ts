@@ -240,7 +240,7 @@ export const recentChangesBriefOperation: OperationDefinition<RecentChangesBrief
             requestParams.rcuser = user;
         }
 
-        const response = await client.request({
+        const response = await client.post({
             ...requestParams,
             ...continueToken,
         }) as RecentChangesResponse;

@@ -1,6 +1,6 @@
 ---
 name: moegirlpedia-mediawiki-api
-description: 经过身份认证访问萌娘百科（Moegirlpedia）的 MediaWiki API，用于页面搜索、获取页面内容、分类、分类成员、页面摘要、监视列表简报及最近更改简报。萌娘百科的大部分 API 要求登录后才可使用。当 OpenClaw 需要获取萌娘百科数据时，请使用此项。
+description: 经过身份认证访问萌娘百科（Moegirlpedia）的 MediaWiki API，用于页面搜索、解析 wikitext、获取页面内容、分类、分类前缀匹配、分类成员、页面摘要、当前用户权限、监视列表简报及最近更改简报。萌娘百科的大部分 API 要求登录后才可使用。当 OpenClaw 需要获取萌娘百科数据时，请使用此项。
 compatibility: Requires Node.js 24.11+, internet access, and the environment variables MOEGIRLPEDIA_USERNAME and MOEGIRLPEDIA_BOT_PASSWORD.
 metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_BOT_PASSWORD"],"bins":["bash","node"],"config":["memory.md"]},"primaryEnv":"MOEGIRLPEDIA_BOT_PASSWORD"}}
 ---
@@ -28,9 +28,12 @@ metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_
 
 - `search`：不需要权限；
 - `get-page`：需要“基本操作”（阅读页面）；
+- `parse-wikitext`：需要“基本操作”（解析页面内容）；
 - `get-categories`：需要“基本操作”（阅读页面）；
+- `get-categories-by-prefix`：需要“基本操作”（读取分类列表）；
 - `get-category-members`：需要“基本操作”（阅读页面）；
 - `get-page-info`：需要“基本操作”（阅读页面）；
+- `get-user-info`：不需要额外权限（仅需成功登录）；
 - `watchlist-brief`：需要“查看您的监视列表”（查看自己的监视列表）；
 - `recent-changes-brief`：不需要权限。
 
@@ -58,9 +61,12 @@ bash {baseDir}/scripts/run.sh <operation> [arguments] [--options]
 
 - `search <query> [--limit 10] [--continue-token TOKEN]`
 - `get-page <title> [--format wikitext|html]`
+- `parse-wikitext <wikitext> [--title TITLE]`
 - `get-categories <title> [--limit 50] [--continue-token TOKEN]`
+- `get-categories-by-prefix <prefix> [--limit 50] [--continue-token TOKEN]`
 - `get-category-members <category> [--type page|subcat|file] [--limit 50] [--continue-token TOKEN]`
 - `get-page-info <title>`
+- `get-user-info`
 - `watchlist-brief [--hours 24] [--from ISO] [--to ISO] [--limit 50] [--namespace 0,14] [--continue-token TOKEN]`
 - `recent-changes-brief [--hours 24] [--from ISO] [--to ISO] [--limit 100] [--large-edit-threshold 5000] [--large-delete-threshold 2000] [--continue-token TOKEN]`
 
@@ -83,9 +89,12 @@ bash {baseDir}/scripts/run.sh <operation> [arguments] [--options]
 ```bash
 bash {baseDir}/scripts/run.sh search "最终幻想XIV"
 bash {baseDir}/scripts/run.sh get-page "阿莉塞·莱韦耶勒尔" --format html
+bash {baseDir}/scripts/run.sh parse-wikitext "'''测试'''" --title "Help:沙盒"
+bash {baseDir}/scripts/run.sh get-categories-by-prefix "最终幻想"
 bash {baseDir}/scripts/run.sh get-categories "最终幻想系列"
 bash {baseDir}/scripts/run.sh get-category-members "最终幻想系列" --type page --limit 100
 bash {baseDir}/scripts/run.sh get-page-info "阿莉塞·莱韦耶勒尔"
+bash {baseDir}/scripts/run.sh get-user-info
 bash {baseDir}/scripts/run.sh watchlist-brief --hours 24
 bash {baseDir}/scripts/run.sh recent-changes-brief --hours 12 --large-delete-threshold 3000
 ```

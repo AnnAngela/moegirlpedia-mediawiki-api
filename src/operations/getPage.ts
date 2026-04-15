@@ -41,7 +41,7 @@ export const getPageOperation: OperationDefinition<GetPageOperationResult> = {
 
         const format: GetPageOperationResult["format"] = formatOption === "html" ? "html" : "wikitext";
 
-        const response = await client.request({
+        const response = await client.post({
             action: "parse",
             page: title,
             prop: format === "html" ? "text|displaytitle|revid|sections" : "wikitext|displaytitle|revid|sections",

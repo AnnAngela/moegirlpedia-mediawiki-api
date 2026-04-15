@@ -46,7 +46,7 @@ export const searchOperation: OperationDefinition<SearchOperationResult> = {
         const query = requirePositional(positionals, 0, "query");
         const limit = parseIntegerOption(options, "limit", 10, { max: 50, min: 1 });
         const continueToken = decodeContinueToken(asString(options["continue-token"]) ?? undefined);
-        const response = await client.request({
+        const response = await client.post({
             action: "query",
             list: "search",
             srsearch: query,

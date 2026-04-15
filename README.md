@@ -461,7 +461,7 @@ npm run test:watch
 
 - TypeScript。
 - ESM。
-- mwn，用于登录并请求 MediaWiki API。
+- 自定义 Api 客户端，用于登录并请求 MediaWiki API。
 - Vitest，用于单元测试。
 - ESLint，用于静态检查。
 

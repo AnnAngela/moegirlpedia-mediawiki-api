@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { searchOperation } from "../../src/operations/search.js";
-import { createMockClient } from "../helpers/mockMwn.js";
+import { createMockClient } from "../helpers/mockApi.js";
 
 describe("searchOperation", () => {
     it("normalises search results and pagination", async () => {
         const client = createMockClient();
-        client.request.mockResolvedValue({
+        client.post.mockResolvedValue({
             "continue": { "continue": "-||", sroffset: 5 },
             query: {
                 search: [
@@ -31,7 +31,7 @@ describe("searchOperation", () => {
             positionals: ["博丽"],
         });
 
-        expect(client.request).toHaveBeenCalledWith(expect.objectContaining({
+        expect(client.post).toHaveBeenCalledWith(expect.objectContaining({
             action: "query",
             list: "search",
             srlimit: 5,

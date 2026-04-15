@@ -39,7 +39,7 @@ export const getCategoriesOperation: OperationDefinition<GetCategoriesOperationR
         const title = requirePositional(positionals, 0, "title");
         const limit = parseIntegerOption(options, "limit", 50, { max: 500, min: 1 });
         const continueToken = decodeContinueToken(asString(options["continue-token"]) ?? undefined);
-        const response = await client.request({
+        const response = await client.post({
             action: "query",
             cllimit: limit,
             clprop: "hidden|timestamp",

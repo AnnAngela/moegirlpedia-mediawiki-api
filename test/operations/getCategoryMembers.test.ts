@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { getCategoryMembersOperation } from "../../src/operations/getCategoryMembers.js";
-import { createMockClient } from "../helpers/mockMwn.js";
+import { createMockClient } from "../helpers/mockApi.js";
 
 describe("getCategoryMembersOperation", () => {
     it("normalises category titles and returns members", async () => {
         const client = createMockClient();
-        client.request.mockResolvedValue({
+        client.post.mockResolvedValue({
             query: {
                 categorymembers: [
                     {
@@ -26,7 +26,7 @@ describe("getCategoryMembersOperation", () => {
             positionals: ["最终幻想系列"],
         });
 
-        expect(client.request).toHaveBeenCalledWith(expect.objectContaining({
+        expect(client.post).toHaveBeenCalledWith(expect.objectContaining({
             cmtitle: "Category:最终幻想系列",
             cmtype: "page",
         }));

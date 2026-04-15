@@ -1,8 +1,8 @@
-import type { MediaWikiClient } from "../client.js";
 import type { CliOptions } from "../helpers.js";
+import type Api from "../module/Api.js";
 
 export interface OperationContext {
-    client: MediaWikiClient;
+    client: Api;
     options: CliOptions;
     positionals: string[];
 }

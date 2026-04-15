@@ -1,7 +1,10 @@
 import { getCategoriesOperation } from "./getCategories.js";
+import { getCategoriesByPrefixOperation } from "./getCategoriesByPrefix.js";
 import { getCategoryMembersOperation } from "./getCategoryMembers.js";
 import { getPageOperation } from "./getPage.js";
 import { getPageInfoOperation } from "./getPageInfo.js";
+import { getUserInfoOperation } from "./getUserInfo.js";
+import { parseWikitextOperation } from "./parseWikitext.js";
 import { recentChangesBriefOperation } from "./recentChangesBrief.js";
 import { searchOperation } from "./search.js";
 import type { OperationDefinition } from "./types.js";
@@ -17,9 +20,12 @@ import { watchlistBriefOperation } from "./watchlistBrief.js";
 export const operations = [
     searchOperation,
     getPageOperation,
+    parseWikitextOperation,
     getCategoriesOperation,
+    getCategoriesByPrefixOperation,
     getCategoryMembersOperation,
     getPageInfoOperation,
+    getUserInfoOperation,
     watchlistBriefOperation,
     recentChangesBriefOperation,
 ] as const satisfies readonly OperationDefinition[];

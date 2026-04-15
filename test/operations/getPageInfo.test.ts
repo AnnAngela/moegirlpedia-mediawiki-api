@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { getPageInfoOperation } from "../../src/operations/getPageInfo.js";
-import { createMockClient } from "../helpers/mockMwn.js";
+import { createMockClient } from "../helpers/mockApi.js";
 
 describe("getPageInfoOperation", () => {
     it("returns extract, urls, and protection metadata", async () => {
         const client = createMockClient();
-        client.request.mockResolvedValue({
+        client.post.mockResolvedValue({
             query: {
                 pages: [
                     {

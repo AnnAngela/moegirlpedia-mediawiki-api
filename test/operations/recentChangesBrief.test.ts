@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { recentChangesBriefOperation } from "../../src/operations/recentChangesBrief.js";
-import { createMockClient } from "../helpers/mockMwn.js";
+import { createMockClient } from "../helpers/mockApi.js";
 
 const oldRevisionIdKey = "old_revid";
 
@@ -16,7 +16,7 @@ describe("recentChangesBriefOperation", () => {
 
     it("keeps only alerted changes and groups them by page", async () => {
         const client = createMockClient();
-        client.request.mockResolvedValue({
+        client.post.mockResolvedValue({
             query: {
                 recentchanges: [
                     {
@@ -58,7 +58,7 @@ describe("recentChangesBriefOperation", () => {
             positionals: [],
         });
 
-        expect(client.request).toHaveBeenCalledWith(expect.objectContaining({
+        expect(client.post).toHaveBeenCalledWith(expect.objectContaining({
             rcend: "2026-04-13T12:00:00.000Z",
             rcstart: "2026-04-11T12:00:00.000Z",
         }));

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { watchlistBriefOperation } from "../../src/operations/watchlistBrief.js";
-import { createMockClient } from "../helpers/mockMwn.js";
+import { createMockClient } from "../helpers/mockApi.js";
 
 const oldRevisionIdKey = "old_revid";
 
@@ -16,7 +16,7 @@ describe("watchlistBriefOperation", () => {
 
     it("groups watchlist changes by page and applies the default 24 hour range", async () => {
         const client = createMockClient();
-        client.request.mockResolvedValue({
+        client.post.mockResolvedValue({
             query: {
                 watchlist: [
                     {
@@ -68,7 +68,7 @@ describe("watchlistBriefOperation", () => {
             positionals: [],
         });
 
-        expect(client.request).toHaveBeenCalledWith(expect.objectContaining({
+        expect(client.post).toHaveBeenCalledWith(expect.objectContaining({
             wlend: "2026-04-13T12:00:00.000Z",
             wlstart: "2026-04-12T12:00:00.000Z",
         }));

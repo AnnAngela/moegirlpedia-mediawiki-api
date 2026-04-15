@@ -1,7 +1,8 @@
 import process from "node:process";
 import { pathToFileURL } from "node:url";
-import { createClientFromEnv, type Environment, type MediaWikiClient } from "./client.js";
+import { createClientFromEnv, type Environment } from "./client.js";
 import { parseCliArguments, UsageError } from "./helpers.js";
+import type Api from "./module/Api.js";
 import { operations } from "./operations/index.js";
 import type { OperationDefinition } from "./operations/types.js";
 
@@ -10,7 +11,7 @@ interface WritableLike {
 }
 
 interface RunCliDependencies {
-    createClient?: (env: Environment) => Promise<MediaWikiClient>;
+    createClient?: (env: Environment) => Promise<Api>;
     env?: Environment;
     operationList?: readonly OperationDefinition[];
     stderr?: WritableLike;

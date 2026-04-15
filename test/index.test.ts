@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { runCli } from "../src/index.js";
+import type Api from "../src/module/Api.js";
 import type { OperationDefinition } from "../src/operations/types.js";
 
 const createWritableBuffer = (): { output: string; write(chunk: string): boolean } => {
@@ -34,7 +35,7 @@ describe("runCli", () => {
             run: ({ positionals }) => Promise.resolve({ firstPositional: positionals[0] }),
             usage: "demo <value>",
         };
-        const createClient = vi.fn(() => Promise.resolve({ request: vi.fn() }));
+        const createClient = vi.fn(() => Promise.resolve({ post: vi.fn() } as unknown as Api));
         const exitCode = await runCli(["demo", "hello"], {
             createClient,
             operationList: [operation],
