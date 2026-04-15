@@ -152,6 +152,12 @@ export default class Api {
         this.#tokens.delete(this.normalizeTokenType(tokenType));
     }
     /**
+     * Perform API get request in POST method. See {@link post()} for details.
+     */
+    get(...args: Parameters<Api["post"]>) {
+        return this.post(...args);
+    }
+    /**
      * Get the categories that a particular page on the wiki belongs to.
      *
      * @returns Promise that resolves with an array of category titles, or with false if the title was not found.
@@ -478,10 +484,7 @@ export default class Api {
      * @param params API parameters
      */
     async postWithToken(tokenType: ApiTokenType, parameters: UnknownApiParams): Promise<any> {
-        const token = this.#tokens.get(tokenType);
-        if (!token) {
-            throw new Error(`No token of type ${tokenType} available, please fetch a new one first.`);
-        }
+        const token = await this.getToken(tokenType);
         try {
             return await this.post({ ...parameters, token });
         } catch (e) {
