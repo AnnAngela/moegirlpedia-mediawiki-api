@@ -18,6 +18,8 @@ metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_
 | MOEGIRLPEDIA_USERNAME | 是 | 萌娘百科用户名，通常建议使用 BotPassword 对应的账号名。 |
 | MOEGIRLPEDIA_BOT_PASSWORD | 是 | 萌娘百科 Bot Password。不要填主密码。 |
 
+**注意：请勿将这些环境变量暴露在日志和输出中，以防止泄露。**
+
 ## 创建机器人密码的建议
 
 建议在萌娘百科账户设置中创建一个专用的机器人密码（Bot Password），并设置适当的权限和限制，以增强安全性。
