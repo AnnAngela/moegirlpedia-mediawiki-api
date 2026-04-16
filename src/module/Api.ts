@@ -143,7 +143,6 @@ export default class Api {
         if (apiURL) {
             this.apiURL = apiURL;
         }
-        this.headers.set("Origin", new URL(this.apiURL).origin);
     }
 
     /**
@@ -424,6 +423,7 @@ export default class Api {
             const cookieString = await this.#cookieJar.getCookieString(this.apiURL);
             const headers = new Headers(this.headers);
             headers.set("Cookie", cookieString);
+            headers.set("Origin", new URL(this.apiURL).origin);
             const response = await fetch(this.apiURL, {
                 method: "POST",
                 headers,
