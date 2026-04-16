@@ -18,6 +18,9 @@ npx esbuild src/index.ts \
     --target=node24.11 \
     --outdir=dist \
     --outbase=src \
+    --legal-comments=linked \
+    --tree-shaking=true \
+    --metafile=.cache/metafile.json \
     # --banner:js="$banner"
 
 chmod 755 dist/index.js
