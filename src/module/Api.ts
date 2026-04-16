@@ -14,7 +14,7 @@ import packageJson from "../../package.json" with { type: "json" };
 
 export const MOEGIRLPEDIA_API_URL = "https://mzh.moegirl.org.cn/api.php";
 
-export const defaultUserAgent = `Node/${process.version} ${packageJson.name}/${packageJson.version} (https://github.com/AnnAngela/moegirlpedia-mediawiki-api)`;
+export const defaultUserAgent = `Node/${process.versions.node} ${packageJson.name}/${packageJson.version} (${packageJson.homepage})`;
 
 type TypeOrArray<T> = T extends any ? T | T[] : never; // T[] would be a mixed array
 type ReplaceValue<T extends U | U[], U, V> = T extends U[] ? V[] : V;
