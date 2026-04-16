@@ -14,9 +14,10 @@ banner=$'#!/usr/bin/env node\nimport { createRequire } from "node:module";\ncons
 npx esbuild src/index.ts \
     --bundle \
     --format=esm \
-    --outfile=dist/index.js \
     --platform=node \
     --target=node24.11 \
+    --outdir=dist \
+    --outbase=src \
     # --banner:js="$banner"
 
 chmod 755 dist/index.js
