@@ -6,8 +6,7 @@
   "homepage": "https://github.com/AnnAngela/moegirlpedia-mediawiki-api",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AnnAngela/moegirlpedia-mediawiki-api.git",
-    "directory": "packages/eslint-config"
+    "url": "git+https://github.com/AnnAngela/moegirlpedia-mediawiki-api.git"
   },
   "private": true,
   "type": "module",
