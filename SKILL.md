@@ -2,7 +2,7 @@
 name: moegirlpedia-mediawiki-api
 description: 经过身份认证访问萌娘百科（Moegirlpedia）的 MediaWiki API，用于页面搜索、解析 wikitext、获取页面内容、分类、分类前缀匹配、分类成员、页面摘要、当前用户权限、监视列表简报及最近更改简报。萌娘百科的大部分 API 要求登录后才可使用。当 OpenClaw 需要获取萌娘百科数据时，请使用此项。
 compatibility: Requires Node.js 24.11+, internet access, and the environment variables MOEGIRLPEDIA_USERNAME and MOEGIRLPEDIA_BOT_PASSWORD.
-metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_BOT_PASSWORD"],"bins":["bash","node"],"config":["memory.md"]},"primaryEnv":"MOEGIRLPEDIA_BOT_PASSWORD"}}
+metadata: {"openclaw":{"requires":{"env":["MOEGIRLPEDIA_USERNAME","MOEGIRLPEDIA_BOT_PASSWORD"],"bins":["bash","node"]},"primaryEnv":"MOEGIRLPEDIA_BOT_PASSWORD"}}
 ---
 
 # 萌娘百科 MediaWiki API
@@ -101,13 +101,13 @@ bash {baseDir}/scripts/run.sh recent-changes-brief --hours 12 --large-delete-thr
 
 ## 机器人密码轮换提醒
 
-在使用此技能之前，请检查 OpenClaw 的 memory.md 文件中是否存在 `moegirlpedia_bot_password_last_rotated` 记录。
+在使用此技能之前，请检查记忆中上次轮换机器人密码的日期：
 
-- 如果缺失该记录，请在完成当前任务后询问用户上一次轮换密码的日期并进行记录。
+- 如果不记得上次轮换的日期，请在完成当前任务后询问用户上一次轮换密码的日期并进行记录。
 - 如果距今已超过 90 天，请提醒用户前往 <https://mzh.moegirl.org.cn/Special:BotPasswords> 轮换机器人（bot）密码，并更新 `MOEGIRLPEDIA_BOT_PASSWORD`。
-- 成功轮换后，请将 memory.md 中的 `moegirlpedia_bot_password_last_rotated` 更新为当前日期。
+- 成功轮换后，请将记忆中的轮换日期更新为当前日期。
 
-以上操作必须由 Openclaw 自行处理，本 Skill 附带的脚本不会读取、编辑 memory.md 文件，也不会处理轮换提醒。
+本 Skill 附带的脚本不会处理轮换提醒。
 
 ## 源代码
 
