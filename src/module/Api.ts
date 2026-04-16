@@ -622,7 +622,4 @@ export default class Api {
         });
         return Array.isArray(pages) ? data.watch : data.watch[0];
     }
-    __test() {
-        return this.#cookieJar;
-    }
 }
