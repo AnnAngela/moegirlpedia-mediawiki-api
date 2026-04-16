@@ -29,6 +29,7 @@ export interface ApiOptions {
     parameters?: UnknownApiParams;
     userAgent?: string;
     timeout?: number;
+    apiURL?: string;
 }
 export interface UserInfo {
     /**
@@ -71,36 +72,23 @@ class ApiError extends Error {
 }
 
 export default class Api {
-    private parameters: UnknownApiParams = {
-        formatversion: 2,
+    static readonly isApiLegacyTokenType = (tokenType: ApiTokenType | ApiLegacyTokenType): tokenType is ApiLegacyTokenType =>
+        tokenType === "edit"
+        || tokenType === "delete"
+        || tokenType === "protect"
+        || tokenType === "move"
+        || tokenType === "block"
+        || tokenType === "unblock"
+        || tokenType === "email"
+        || tokenType === "import"
+        || tokenType === "options";
+    static readonly normalizeTokenType = (tokenType: ApiTokenType | ApiLegacyTokenType): ApiTokenType => {
+        if (Api.isApiLegacyTokenType(tokenType)) {
+            return "csrf";
+        }
+        return tokenType;
     };
-    private headers = {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache",
-        Connection: "keep-alive",
-        "User-Agent": defaultUserAgent,
-        "Api-User-Agent": defaultUserAgent,
-    };
-    private abortControllers = new Set<AbortController>();
-    private currentUser: string | null = null;
-    private queues = new Map<string, Promise<any>>();
-    #tokens = new Map<ApiTokenType, string>();
-    #cookieJar = new CookieJar();
-    timeout = 60000;
-
-    constructor(options?: ApiOptions) {
-        if (options?.userAgent) {
-            this.headers["User-Agent"] = options.userAgent;
-        }
-        if (options?.parameters) {
-            Object.assign(this.parameters, options.parameters);
-        }
-        if (options?.timeout) {
-            this.timeout = options.timeout;
-        }
-    }
-    private parseParameters = (parameters: UnknownApiParams) => {
+    static readonly parseParameters = (parameters: UnknownApiParams) => {
         const params = new URLSearchParams();
         for (const [key, value] of Object.entries(parameters)) {
             if (value === undefined) {
@@ -116,22 +104,47 @@ export default class Api {
         }
         return params.toString();
     };
-    private isApiLegacyTokenType = (tokenType: ApiTokenType | ApiLegacyTokenType): tokenType is ApiLegacyTokenType =>
-        tokenType === "edit"
-        || tokenType === "delete"
-        || tokenType === "protect"
-        || tokenType === "move"
-        || tokenType === "block"
-        || tokenType === "unblock"
-        || tokenType === "email"
-        || tokenType === "import"
-        || tokenType === "options";
-    private normalizeTokenType = (tokenType: ApiTokenType | ApiLegacyTokenType): ApiTokenType => {
-        if (this.isApiLegacyTokenType(tokenType)) {
-            return "csrf";
-        }
-        return tokenType;
+
+    private parameters: UnknownApiParams = {
+        formatversion: 2,
     };
+    private headers = new Headers({
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+        Connection: "keep-alive",
+        "User-Agent": defaultUserAgent,
+        "Api-User-Agent": defaultUserAgent,
+    });
+    private abortControllers = new Set<AbortController>();
+    private currentUser: string | null = null;
+    private queues = new Map<string, Promise<any>>();
+    #tokens = new Map<ApiTokenType, string>();
+    #cookieJar = new CookieJar();
+    timeout = 60000;
+    apiURL = MOEGIRLPEDIA_API_URL;
+
+    constructor(options?: ApiOptions) {
+        const {
+            userAgent,
+            parameters,
+            timeout,
+            apiURL,
+        } = options ?? {};
+        if (userAgent) {
+            this.headers.set("User-Agent", userAgent);
+        }
+        if (parameters) {
+            Object.assign(this.parameters, parameters);
+        }
+        if (timeout) {
+            this.timeout = timeout;
+        }
+        if (apiURL) {
+            this.apiURL = apiURL;
+        }
+        this.headers.set("Origin", new URL(this.apiURL).origin);
+    }
 
     /**
      * Abort all unfinished requests issued by this Api object.
@@ -151,7 +164,7 @@ export default class Api {
      */
     badToken(tokenType: ApiTokenType) {
         this.#tokens.delete(tokenType);
-        this.#tokens.delete(this.normalizeTokenType(tokenType));
+        this.#tokens.delete(Api.normalizeTokenType(tokenType));
     }
     /**
      * Perform API get request in POST method. See {@link post()} for details.
@@ -245,7 +258,7 @@ export default class Api {
         type: ApiTokenType | ApiLegacyTokenType,
         additionalParams?: ApiQueryTokensParams,
     ) {
-        const normalizedType = this.normalizeTokenType(type);
+        const normalizedType = Api.normalizeTokenType(type);
         const cachedToken = this.#tokens.get(normalizedType);
         if (cachedToken) {
             return cachedToken;
@@ -311,7 +324,7 @@ export default class Api {
             return result;
         }
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        throw new Error(`Login failed: ${result ?? "unknown error"} (code: ${data?.error?.code ?? "unknown"})`);
+        throw new Error(`Login failed: ${result ?? "unknown error"} (reason: ${data?.login?.reason ?? "unknown"})`);
     }
     /**
      * Post a new section to the page.
@@ -394,7 +407,7 @@ export default class Api {
             Reflect.deleteProperty(parameters, "token");
         }
 
-        const body = this.parseParameters({
+        const body = Api.parseParameters({
             ...this.parameters,
             ...parameters,
             token,
@@ -408,28 +421,25 @@ export default class Api {
             }
         }, this.timeout);
         try {
-            const cookieString = await this.#cookieJar.getCookieString(MOEGIRLPEDIA_API_URL);
-            const response = await fetch(MOEGIRLPEDIA_API_URL, {
+            const cookieString = await this.#cookieJar.getCookieString(this.apiURL);
+            const headers = new Headers(this.headers);
+            headers.set("Cookie", cookieString);
+            const response = await fetch(this.apiURL, {
                 method: "POST",
-                headers: {
-                    ...this.headers,
-                    Cookie: cookieString,
-                },
+                headers,
                 body,
                 signal: controller.signal,
             });
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`, {
-                    cause: {
-                        code: "http",
-                        response,
-                    },
+                throw new ApiError(`HTTP error! status: ${response.status}`, {
+                    code: "http",
+                    response,
                 });
             }
             const setCookies = response.headers.getSetCookie();
             if (setCookies.length > 0) {
                 for (const cookieStr of setCookies) {
-                    await this.#cookieJar.setCookie(cookieStr, MOEGIRLPEDIA_API_URL);
+                    await this.#cookieJar.setCookie(cookieStr, this.apiURL);
                 }
             }
             const result = await response.json() as undefined | null | Record<string, any>;
@@ -611,5 +621,8 @@ export default class Api {
             titles: pages,
         });
         return Array.isArray(pages) ? data.watch : data.watch[0];
+    }
+    __test() {
+        return this.#cookieJar;
     }
 }
