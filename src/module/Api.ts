@@ -319,7 +319,7 @@ export default class Api {
 
         const result = data?.login?.result as string | undefined;
         if (result === "Success") {
-            this.currentUser = username;
+            this.currentUser = username.split("@")[0];
             return result;
         }
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
