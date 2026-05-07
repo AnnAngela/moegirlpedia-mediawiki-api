@@ -33,12 +33,12 @@
     "tough-cookie": "^6.0.1"
   },
   "devDependencies": {
-    "@annangela/eslint-config": "^11.0.0",
-    "@types/node": "^24.10.1",
-    "clawhub": "0.9.0",
+    "@annangela/eslint-config": "^13.0.0",
+    "@types/node": "^24.12.3",
+    "clawhub": "0.12.3",
     "esbuild": "^0.28.0",
     "types-mediawiki-api": "^2.0.0",
-    "typescript": "^6.0.2",
-    "vitest": "^4.1.4"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
   }
 }
